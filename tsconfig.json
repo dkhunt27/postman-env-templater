@@ -1,6 +1,6 @@
 {
   "include": ["./src"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "babel.config.js"],
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
@@ -17,6 +17,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "baseUrl": ".",
+    "types": ["jest"],
     "paths": {
       /*
         Allow using e.g. `import '@/sample-module' instead of using relative paths.
