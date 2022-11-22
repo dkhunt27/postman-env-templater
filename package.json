@@ -13,8 +13,11 @@
     "build/index.*",
     "build/types/**/*"
   ],
+  "bin": {
+    "thunder-client-env-templater": "src/bin/thunder-client-env-templater"
+  },
   "scripts": {
-    "test": "yarn jest --passWithNoTests",
+    "test": "yarn jest",
     "build": "rimraf build && tsc && tsc-alias",
     "preversion": "yarn lint && yarn build && yarn test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && npm run format && git add -A",
@@ -27,6 +30,7 @@
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.215.0",
     "fast-glob": "^3.2.12",
+    "minimist": "^1.2.7",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

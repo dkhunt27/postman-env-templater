@@ -8,6 +8,7 @@ import { existsSync, readFileSync, renameSync } from 'fs';
 import { processSsmInstruction } from './process-ssm-instruction';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+import { setupAwsConfig } from './setup-aws-config.js';
 
 export const assertFileExists = (filePath: string) => {
   if (!existsSync(filePath)) {
@@ -123,18 +124,7 @@ export const backupThunderClientEnvironmentFile = (filePath: string) => {
   }
 };
 
-export const setupAwsConfig = (params: { region: string }): SSMClientConfig => {
-  const { region } = params;
-
-  const awsConfig: SSMClientConfig = {
-    region: region,
-  };
-
-  return awsConfig;
-};
-
-export const parseConfig = (): ConfigType => {
-  const configFullPath = path.join(process.cwd(), 'templater-config.json');
+export const parseConfig = (configFullPath: string): ConfigType => {
   console.log(` ... parsing config: ${configFullPath}`);
 
   if (!existsSync(configFullPath)) {
