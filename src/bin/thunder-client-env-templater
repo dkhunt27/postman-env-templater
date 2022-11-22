@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-
-const path = require('path');
-
 const parseArgs = require('minimist')(process.argv.slice(2));
-// const { execute } = require('thunder-client-env-templater');
-console.log(process.cwd());
-const { execute } = require(path.join(process.cwd(), 'build/index'));
+const { execute } = require('thunder-client-env-templater');
 execute(parseArgs);

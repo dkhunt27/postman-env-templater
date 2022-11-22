@@ -7,7 +7,6 @@ import { SSMClientConfig } from '@aws-sdk/client-ssm';
 import { existsSync, readFileSync, renameSync } from 'fs';
 import { processSsmInstruction } from './process-ssm-instruction';
 import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
 import { setupAwsConfig } from './setup-aws-config.js';
 
 export const assertFileExists = (filePath: string) => {
