@@ -14,7 +14,7 @@
     "build/types/**/*"
   ],
   "scripts": {
-    "test": "yarn jest",
+    "test": "yarn jest --passWithNoTests",
     "build": "rimraf build && tsc && tsc-alias",
     "preversion": "yarn lint && yarn build && yarn test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && npm run format && git add -A",
