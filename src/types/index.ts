@@ -1,11 +1,25 @@
-export type PostmanEnvironmentVariablesType = {
+export type TemplateVariablesType = {
   name: string;
-  values: PostmanEnvironmentVariableType[];
+  data: VariableType[];
 };
 
-export type PostmanEnvironmentVariableType = {
-  key: string;
+export type ProcessedVariablesType = {
+  _id: string;
+  name: string;
+  default: boolean;
+  sortNum: number;
+  created: string;
+  modified: string;
+  data: VariableType[];
+};
+
+export type VariableType = {
+  name: string;
   value: string;
-  type: string;
-  enabled: boolean;
+};
+
+export type ConfigType = {
+  thunderClientEnvironmentFileDir: string;
+  awsRegion: string;
+  templateFiles: string[];
 };

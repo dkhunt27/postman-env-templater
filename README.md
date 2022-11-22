@@ -1,92 +1,49 @@
-# Postman-env-templater
+# thunder-client-env-templater
 
-Creating postman collections using environments so you can easily switch between dev, test, beta, prod, etc is a great thing. Makes it easy to to test and work with your code across all the environments you support. However, most api calls require some sort of secret information like an api key or auth credentials. And we cannot check that information into the repo. And maybe Postman Cloud is not a solution that you can use. Now when you use the environment for the first time or you want to pull in any updates to it, you will need to look up that secret information and update your local environments, but also, ensure your local copies with the secrets do not accidentally get check back into the repo.
+Creating thunder client collections using environments so you can easily switch between dev, test, beta, prod, etc is a great thing. Makes it easy to to test and work with your code across all the environments you support. However, most api calls require some sort of secret information like an api key or auth credentials. And you should not check that information into the repo. And maybe Postman Cloud is not a solution that you can use. Now when you use the environment for the first time or you want to pull in any updates to it, you will need to look up that secret information and update your local environments, but also, ensure your local copies with the secrets do not accidentally get check back into the repo.
 
-This is where postman-env-templates helps. You save your secrets to SSM and update your env templates to have the ssm path. You can save your templates to the repo. The logic takes the template, looks up any SSM params needed, and then creates the real postman env files with the secret values. Lastly, you use gitignore to ensure those real environment files do not get checked into the repo.
-
-## Help
-
-```bash
-postman-env-templater
-
-Utility script for setting up postman environment files.  (i.e. update secrets from ssm)
-
-Usage:
-    postman-env-templater OPTION[S]
-
-OPTIONS:
-        --help               displays help
-    -t  --template-file      environment template file to process
-    -o  --output-dir         OPTIONAL: where to save processed environment file; defaults to current directory
-    -w  --working-dir        OPTIONAL: where to set the working directory; defaults to current directory
-    -r  --region             OPTIONAL: aws region to use
-
-Examples:
-    yarn postman-env-templater --template-file=./postman/env-templates/dev.json                  processes the dev environment file
-```
+This is where thunder-client-env-templates helps. You save your secrets to SSM and update your env templates to have the ssm path. You can save your templates to the repo. The logic takes the template, looks up any SSM params needed, and then creates the real thunder client environment file with the secret values. Lastly, you use gitignore to ensure that real environment file do not get checked into the repo.
 
 ### Install
 
-- If using yarn, run `yarn add postman-env-templater`
-- If using npm, run `npm install postman-env-templater`
+- If using yarn, run `yarn add thunder-client-env-templater`
+- If using npm, run `npm install thunder-client-env-templater`
 
 ### Usage
 
-- Create a folder for your env templates. Create a json file for each environment that will be templated.
+- Create a thunder client folder (TCF) for you thunder client files (.thunder-client)
+- Create a folder in your TCF for your env templates (.thunder-client/env-templates)
+- Create a json file for each environment that will be templated (.thunder-client/env-templates/env-abc.json)
+- Update the environment file with all the environment variables required. If the variable is not a secret, just add the name/value in plain text (knowing this will be saved to your repo in plain text). If the variable is a secret, save the secret value to SSM and then add the name and ssm path as the value in the environmet template file.
 
 ```bash
-postman
-  projectA.postman_collection.json
-  - env-templates
-    dev.json
-    test.json
-    beta.json
-    prod.json
-```
-
-- Update .gitignore and add your environments folder which will be sibling to the env-templates folder
-
-```bash
-#.gitignore
-postman/environments/
-```
-
-- Update the environment templates. In the values array, add any non secret variables and their correct values and set enabled to true. For secrets, append to the key "4TEMPLATER:" and its value should be ssm path appended with "ssm:" and set enabled to false. Like so:
-
-```base
-# postman/env-templates/dev.json
+# env template
 {
-  "name": "project-a-dev",
-  "values": [
+  "name": "[dev or test or prod etc]",
+  "data": [
     {
-      "key": "baseUrl",
-      "value": "https://dev-api.projecta.com/api",
-      "type": "default",
-      "enabled": true
+      "name": "baseUrl",
+      "value": "https://dev-api.projecta.com/api"
     },
     {
-      "key": "4TEMPLATER:username",
-      "value": "ssm:/projectA/dev/username:false",
-      "type": "secret",
-      "enabled": false
+      "name": "4TEMPLATER:username",
+      "value": "ssm:/projectA/dev/username:false",  #:true means it is encrypted ssm value; :false means it is not encrypted
     },
     {
       "key": "4TEMPLATER:password",
-      "value": "ssm:/projectA/dev/password:true",
-      "type": "secret",
-      "enabled": false
+      "value": "ssm:/projectA/dev/password:true"
     }
   ]
 }
+
 ```
 
-- Add `postman-env-templater` to your project as dev dependency
-- Run the following command per environment you want to template. You will need to have the correct credentials in your default profile
+- Update .gitignore and add your final thunder-client environment file so it doesn't get checked into your repo. `thunder-tests/thunderEnvironment.json` is the path default for thunder client
 
 ```bash
-# assuming using yarn
-yarn postman-env-templater --working-dir=$PWD --template-file=./env-templates/dev.json -output-dir=./environments --region=us-west-2
-
+#.gitignore
+.thunder-client/thunder-tests/thunderEnvironment.json
 ```
 
-- Now you can import the environment folder into postman with all the secrets populated
+- Create thunder-client config
+- Add script to your package.json
